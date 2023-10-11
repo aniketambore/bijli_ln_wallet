@@ -9,10 +9,12 @@ class MakePaymentFAB extends StatelessWidget {
     required this.animation,
     required this.animationController,
     required this.onSendOffChainTap,
+    required this.onSendOnChainTap,
   });
   final Animation<double>? animation;
   final AnimationController? animationController;
   final VoidCallback onSendOffChainTap;
+  final VoidCallback onSendOnChainTap;
 
   @override
   Widget build(BuildContext context) {
@@ -48,7 +50,10 @@ class MakePaymentFAB extends StatelessWidget {
             color: BitcoinColors.white,
           ),
           bubbleColor: BitcoinColors.black,
-          onPress: () {},
+          onPress: () {
+            animationController?.reverse();
+            onSendOnChainTap();
+          },
         ),
         Bubble(
           icon: Icons.qr_code_scanner_outlined,

@@ -121,11 +121,11 @@ class __OpenChannelFormState extends State<_OpenChannelForm> {
         final hasSubmissionError =
             state.submissionStatus == SubmissionStatus.genericError;
         if (hasSubmissionError) {
-          ScaffoldMessenger.of(context)
-            ..hideCurrentSnackBar()
-            ..showSnackBar(
-              const GenericErrorSnackBar(),
-            );
+          BijliFlushbar.showFlushbar(
+            context,
+            message:
+                'Oops! We encountered an issue while trying to open a payment channel. Please try again later.',
+          );
         }
       },
       builder: (context, state) {

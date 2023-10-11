@@ -15,18 +15,24 @@ dependencies:
     git:
       url: https://github.com/aniketambore/bitcoinuikit-flutter.git
       ref: alternative-implementation
-
-  # Platform-specific file and directory access
-  path_provider: ^2.0.12
+  
+  # Icons for Bitcoin-related features
+  bitcoin_icons: ^0.0.4
 
   # Lightning Development Kit (LDK) for Flutter
   ldk_node:
     git:
       url: https://github.com/LtbLightning/ldk-node-flutter/
       ref: main
+  
+  # BOLT11 invoice decoding
+  bolt11_decoder: ^1.0.2
 
-  # Icons for Bitcoin-related features
-  bitcoin_icons: ^0.0.4
+  # BIP39 mnemonic code for generating deterministic keys
+  bip39: ^1.0.6
+
+  # Platform-specific file and directory access
+  path_provider: ^2.0.12
 
   # QR code generation and scanning
   qr_flutter: ^4.1.0
@@ -43,20 +49,11 @@ dependencies:
   # Value equality and comparison for Dart
   equatable: ^2.0.5
 
-  # BOLT11 invoice decoding
-  bolt11_decoder: ^1.0.2
-
   # Auto-sizing text widget
   auto_size_text: ^3.0.0
 
   # Secure storage for sensitive data
   flutter_secure_storage: ^9.0.0
-
-  # BIP39 mnemonic code for generating deterministic keys
-  bip39: ^1.0.6
-
-  # Logging utility
-  logger: ^2.0.2+1
 
   # Declarative routing library
   routemaster: ^1.0.1
