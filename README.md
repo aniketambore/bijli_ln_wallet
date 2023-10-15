@@ -1,6 +1,6 @@
 <div align="center">
     <img src="https://i.ibb.co/dWGyF4m/flutter-ldk-cover.png" alt="Tutorial Logo"/>
-    <h1> How to develop a Non-Custodial Bitcoin Lightning Wallet?</h1>
+    <h1> How to develop a Non-Custodial Bitcoin Lightning Wallet using Flutter and LDK?</h1>
 </div>
 
 Hey there! In this tutorial, I'm going to show you how to create your very own Non-Custodial Bitcoin Lightning wallet using Flutter and the Lightning Development Kit (LDK). It all began for me when I finished reading "Mastering the Lightning Network" book. As a little side project, I decided to develop a non-custodial Bitcoin Lightning wallet, and here's what I've learned and developed along the way.
