@@ -9,62 +9,28 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-
-  # UI Kit for Bitcoin-related features
   bitcoin_ui_kit:
     git:
       url: https://github.com/aniketambore/bitcoinuikit-flutter.git
       ref: alternative-implementation
-  
-  # Icons for Bitcoin-related features
   bitcoin_icons: ^0.0.4
-
-  # Lightning Development Kit (LDK) for Flutter
   ldk_node:
     git:
       url: https://github.com/LtbLightning/ldk-node-flutter/
       ref: main
-  
-  # BOLT11 invoice decoding
   bolt11_decoder: ^1.0.2
-
-  # BIP39 mnemonic code for generating deterministic keys
   bip39: ^1.0.6
-
-  # Platform-specific file and directory access
-  path_provider: ^2.0.12
-
-  # QR code generation and scanning
-  qr_flutter: ^4.1.0
-
-  # Share functionality
-  share_plus: ^7.1.0
-
-  # Notification and snack bar library
-  another_flushbar: ^1.12.30
-
-  # Floating action button with bubble menu
-  floating_action_bubble: ^1.1.4
-
-  # Value equality and comparison for Dart
-  equatable: ^2.0.5
-
-  # Auto-sizing text widget
-  auto_size_text: ^3.0.0
-
-  # Secure storage for sensitive data
   flutter_secure_storage: ^9.0.0
-
-  # Declarative routing library
+  path_provider: ^2.0.12
+  qr_flutter: ^4.1.0
+  share_plus: ^7.1.0
+  another_flushbar: ^1.12.30
+  floating_action_bubble: ^1.1.4
+  equatable: ^2.0.5
+  auto_size_text: ^3.0.0
   routemaster: ^1.0.1
-
-  # State management library
   flutter_bloc: ^8.1.3
-
-  # Confetti animation library
   confetti: ^0.7.0
-
-  # Reactive Extensions (Rx) for Dart
   rxdart: ^0.27.7
 
 dev_dependencies:

@@ -2,8 +2,9 @@ import 'package:bijli_ln_wallet/domain_models/domain_models.dart';
 import 'package:bolt11_decoder/bolt11_decoder.dart';
 import 'package:flutter/foundation.dart';
 import 'package:rxdart/rxdart.dart';
-
 import 'wallet_secure_storage.dart';
+
+// TODO: Add imports here
 
 class WalletRepository {
   // TODO: Initialize variables here
@@ -19,14 +20,24 @@ class WalletRepository {
     return 'dummy_mnemonic';
   }
 
+  // TODO: Implement method to create or recover a wallet
+  Future<String> createOrRecoverWallet({String? recoveryMnemonic}) async {
+    return Future.value('dummy_mnemonic'); // Dummy return value
+  }
+
   // TODO: Implement method to retrieve wallet mnemonic from storage
   Future<String?> getWalletMnemonic() {
     return Future.value(null); // Dummy return value
   }
 
-  // TODO: Implement method to create or recover a wallet
-  Future<String> createOrRecoverWallet({String? recoveryMnemonic}) async {
-    return Future.value('dummy_mnemonic'); // Dummy return value
+  // TODO: Implement method to retrieve Lightning node ID
+  Future<String> getNodeId() async {
+    return Future.value('dummy_node_id'); // Dummy return value
+  }
+
+  // TODO: Implement method to retrieve on-chain address
+  Future<String> getOnChainAddress() async {
+    return Future.value('dummy_address'); // Dummy return value
   }
 
   // TODO: Implement method to retrieve on-chain balance
@@ -34,9 +45,12 @@ class WalletRepository {
     return Future.value(0); // Dummy return value
   }
 
-  // TODO: Implement method to retrieve on-chain address
-  Future<String> getOnChainAddress() async {
-    return Future.value('dummy_address'); // Dummy return value
+  // TODO: Implement method to send funds to an on-chain address
+  Future<String> sendToOnchainAddress({
+    required String address,
+    required int amountSats,
+  }) async {
+    return Future.value('dummy_txid'); // Dummy return value
   }
 
   // TODO: Implement method to open a Lightning payment channel
@@ -52,6 +66,16 @@ class WalletRepository {
 
   // TODO: Implement method to list Lightning payment channels
   Future<List<dynamic>> listPaymentChannels() async {
+    return Future.value([]); // Dummy return value
+  }
+
+  // TODO: Implement method to list Lightning peers
+  Future<List<dynamic>> listPeers() async {
+    return Future.value([]); // Dummy return value
+  }
+
+  // TODO: Implement method to list Lightning transactions
+  Future<List<dynamic>> listTransactions() async {
     return Future.value([]); // Dummy return value
   }
 
@@ -83,11 +107,6 @@ class WalletRepository {
     // Dummy implementation
   }
 
-  // TODO: Implement method to list Lightning transactions
-  Future<List<dynamic>> listTransactions() async {
-    return Future.value([]); // Dummy return value
-  }
-
   Stream<Wallet> getWallet() async* {
     if (!_walletSubject.hasValue) {
       final walletInfo = await _getWalletInformation();
@@ -104,6 +123,15 @@ class WalletRepository {
 
   // TODO: Implement method to retrieve wallet information
   Future<Wallet> _getWalletInformation() async {
+    // TODO: Initialize variables to hold various wallet information
+    // TODO: Retrieve our own node ID
+    // TODO: Retrieve on-chain balance and address information
+    // TODO: Retrieve lists of payment channels, peers, and payment details
+
+    // TODO: Calculate inbound and outbound channel capacities
+
+    // TODO: If there are inbound capacity, create a zero-satoshis invoice (BOLT11 format)
+
     // Dummy implementation
     return const Wallet(
       onChainBalanceSats: 0,
@@ -118,24 +146,6 @@ class WalletRepository {
       peersList: [],
       paymentsList: [],
     );
-  }
-
-  // TODO: Implement method to list Lightning peers
-  Future<List<dynamic>> listPeers() async {
-    return Future.value([]); // Dummy return value
-  }
-
-  // TODO: Implement method to retrieve Lightning node ID
-  Future<String> getNodeId() async {
-    return Future.value('dummy_node_id'); // Dummy return value
-  }
-
-  // TODO: Implement method to send funds to an on-chain address
-  Future<String> sendToOnchainAddress({
-    required String address,
-    required int amountSats,
-  }) async {
-    return Future.value('dummy_txid'); // Dummy return value
   }
 
   double satoshisToBitcoin(int satoshis) {
