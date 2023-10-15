@@ -107,21 +107,6 @@ class WalletRepository {
     // Dummy implementation
   }
 
-  Stream<Wallet> getWallet() async* {
-    if (!_walletSubject.hasValue) {
-      final walletInfo = await _getWalletInformation();
-
-      _walletSubject.add(walletInfo);
-    }
-    yield* _walletSubject.stream;
-  }
-
-  Future<void> refreshWallet() async {
-    final walletInfo = await _getWalletInformation();
-    _walletSubject.add(walletInfo);
-  }
-
-  // TODO: Implement method to retrieve wallet information
   Future<Wallet> _getWalletInformation() async {
     // TODO: Initialize variables to hold various wallet information
     // TODO: Retrieve our own node ID
@@ -141,11 +126,25 @@ class WalletRepository {
       paymentChannelsList: [],
       bolt11Invoice: 'dummy_invoice',
       esploraUrl: 'dummy_esplora_url',
-      network: 'testnet',
+      network: 'dummy_network',
       nodeId: 'dummy_node_id',
       peersList: [],
       paymentsList: [],
     );
+  }
+
+  Stream<Wallet> getWallet() async* {
+    if (!_walletSubject.hasValue) {
+      final walletInfo = await _getWalletInformation();
+
+      _walletSubject.add(walletInfo);
+    }
+    yield* _walletSubject.stream;
+  }
+
+  Future<void> refreshWallet() async {
+    final walletInfo = await _getWalletInformation();
+    _walletSubject.add(walletInfo);
   }
 
   double satoshisToBitcoin(int satoshis) {
