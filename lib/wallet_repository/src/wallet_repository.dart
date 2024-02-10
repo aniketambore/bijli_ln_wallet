@@ -108,8 +108,9 @@ class WalletRepository {
       nodeId: ldk.PublicKey(internal: nodeId),
       channelAmountSats: amountSat,
       announceChannel: true,
-      pushToCounterpartyMsat:
-          (pushToCounterpartySat != null) ? pushToCounterpartySat * 1000 : 0,
+      pushToCounterpartyMsat: (pushToCounterpartySat != null)
+          ? satoshisToMilliSatoshis(pushToCounterpartySat)
+          : 0,
     );
   }
 
@@ -280,5 +281,30 @@ class WalletRepository {
   Future<String> getNodeId() async {
     final id = await ldkNode.nodeId();
     return id.internal;
+  }
+
+  Future<String> sendToOnchainAddress({
+    required String address,
+    required int amountSats,
+  }) async {
+    logger.d('[WalletRepository] Sending On-Chain payment...');
+    final addr = ldk.Address(internal: address);
+    final txid = await ldkNode.sendToOnchainAddress(
+      address: addr,
+      amountSats: amountSats,
+    );
+    logger.i('[WalletRepository] Send On-Chain Txid: ${txid.internal}');
+    return txid.internal;
+  }
+
+  Future<void> sendSpontaneousPayment({
+    required int amountMsat,
+    required String nodeId,
+  }) async {
+    final id = ldk.PublicKey(internal: nodeId);
+    await ldkNode.sendSpontaneousPayment(
+      amountMsat: amountMsat,
+      nodeId: id,
+    );
   }
 }

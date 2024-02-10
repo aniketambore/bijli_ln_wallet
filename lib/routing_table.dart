@@ -2,6 +2,7 @@ import 'package:bijli_ln_wallet/features/home_screen/home_screen.dart';
 import 'package:bijli_ln_wallet/features/open_channel/open_channel.dart';
 import 'package:bijli_ln_wallet/features/send_offchain/send_offchain.dart';
 import 'package:bijli_ln_wallet/features/send_offchain_dialog/send_offchain_dialog.dart';
+import 'package:bijli_ln_wallet/features/send_onchain/src/send_onchain_screen.dart';
 import 'package:bijli_ln_wallet/features/success_indicator/success_indicator.dart';
 import 'package:bijli_ln_wallet/features/wallet_creation/wallet_creation.dart';
 import 'package:bijli_ln_wallet/features/wallet_info/wallet_info.dart';
@@ -61,6 +62,9 @@ Map<String, PageBuilder> buildRoutingTable({
             },
             onSendOffChainTap: () {
               routerDelegate.push(_PathConstants.sendOffChainPath);
+            },
+            onSendOnChainTap: () {
+              routerDelegate.push(_PathConstants.sendOnChainPath);
             },
             onWalletInfoTap: () {
               routerDelegate.push(_PathConstants.walletInfoPath);
@@ -131,6 +135,27 @@ Map<String, PageBuilder> buildRoutingTable({
         ),
       );
     },
+    _PathConstants.sendOnChainPath: (_) {
+      return MaterialPage(
+        name: 'send-onchain',
+        child: SendOnChainScreen(
+            walletRepository: walletRepository,
+            onSendSuccess: (title, message, context) {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => SuccessIndicatorScreen(
+                    title: title,
+                    message: message,
+                    onOkayTap: () {
+                      routerDelegate.pop();
+                    },
+                  ),
+                ),
+              );
+            }),
+      );
+    },
     _PathConstants.walletInfoPath: (_) {
       return MaterialPage(
         name: 'wallet-info',
@@ -154,6 +179,7 @@ class _PathConstants {
   static String get openChannelPath => '$homePath/open-channel';
 
   static String get sendOffChainPath => '$homePath/send-offchain';
+  static String get sendOnChainPath => '$homePath/send-onchain';
 
   static String get walletInfoPath => '$homePath/wallet-info';
 }

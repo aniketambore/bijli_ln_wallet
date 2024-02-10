@@ -25,12 +25,14 @@ class HomeScreen extends StatelessWidget {
     required this.walletRepository,
     required this.onOpenChannelTap,
     required this.onSendOffChainTap,
+    required this.onSendOnChainTap,
     required this.onWalletInfoTap,
     required this.onSuccessPush,
   });
   final WalletRepository walletRepository;
   final VoidCallback onOpenChannelTap;
   final VoidCallback onSendOffChainTap;
+  final VoidCallback onSendOnChainTap;
   final VoidCallback onWalletInfoTap;
   final OnSuccess onSuccessPush;
 
@@ -41,6 +43,7 @@ class HomeScreen extends StatelessWidget {
       child: _HomeScreenView(
         onOpenChannelTap: onOpenChannelTap,
         onSendOffChainTap: onSendOffChainTap,
+        onSendOnChainTap: onSendOnChainTap,
         onWalletInfoTap: onWalletInfoTap,
         onSuccessPush: onSuccessPush,
       ),
@@ -52,11 +55,13 @@ class _HomeScreenView extends StatefulWidget {
   const _HomeScreenView({
     required this.onOpenChannelTap,
     required this.onSendOffChainTap,
+    required this.onSendOnChainTap,
     required this.onWalletInfoTap,
     required this.onSuccessPush,
   });
   final VoidCallback onOpenChannelTap;
   final VoidCallback onSendOffChainTap;
+  final VoidCallback onSendOnChainTap;
   final VoidCallback onWalletInfoTap;
   final OnSuccess onSuccessPush;
 
@@ -143,6 +148,7 @@ class _HomeScreenViewState extends State<_HomeScreenView>
                     animation: _animation,
                     animationController: _animationController,
                     onSendOffChainTap: widget.onSendOffChainTap,
+                    onSendOnChainTap: widget.onSendOnChainTap,
                   )
                 : null,
       ),
