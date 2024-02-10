@@ -192,7 +192,7 @@ Move on to `// TODO: Initialize variables here` and replace it with the followin
   // 2
   static const esploraURL = "https://mempool.space/testnet/api";
   // 3
-  static const network = ldk.Network.testnet;
+  static const network = ldk.Network.Testnet;
   // 4
   late ldk.Node ldkNode;
 ```

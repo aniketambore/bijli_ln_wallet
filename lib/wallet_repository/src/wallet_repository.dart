@@ -16,7 +16,7 @@ class WalletRepository {
   late File file;
   static const LDK_NODE_DIR = "LDK_NODE";
   static const esploraURL = "https://mempool.space/testnet/api";
-  static const network = ldk.Network.testnet;
+  static const network = ldk.Network.Testnet;
   late ldk.Node ldkNode;
   final WalletSecureStorage _secureStorage;
   final BehaviorSubject<Wallet> _walletSubject = BehaviorSubject();
@@ -65,7 +65,7 @@ class WalletRepository {
 
     const esploraUrl = esploraURL;
     final builder = ldk.Builder()
-        .setEntropyBip39Mnemonic(mnemonic: ldk.Mnemonic(internal: mnemonic))
+        .setEntropyBip39Mnemonic(mnemonic: ldk.Mnemonic(mnemonic))
         .setNetwork(network)
         .setStorageDirPath(storagePath)
         .setEsploraServer(esploraServerUrl: esploraUrl);
@@ -101,7 +101,7 @@ class WalletRepository {
   }) async {
     logger.d('[WalletRepository] Opening payment channel...');
     await ldkNode.connectOpenChannel(
-      address: ldk.NetAddress.iPv4(
+      netaddress: ldk.NetAddress.iPv4(
         addr: host,
         port: port,
       ),
@@ -146,6 +146,7 @@ class WalletRepository {
   Future<String> createZeroSatInvoice({String? description}) async {
     logger.d('[WalletRepository] Creating BOLT11 zero sat invoice...');
     final invoice = await ldkNode.receiveVariableAmountPayment(
+      nodeId: await ldkNode.nodeId(),
       description: (description != null && description.trim().isNotEmpty)
           ? description
           : 'Bijli Invoice',
@@ -159,7 +160,7 @@ class WalletRepository {
       {required String bolt11Invoice}) async {
     logger.d('[WalletRepository] Sending Off-Chain payment...');
     final paymentHash = await ldkNode.sendPayment(
-      invoice: ldk.Invoice(
+      invoice: ldk.Bolt11Invoice(
         internal: bolt11Invoice,
       ),
     );
@@ -184,7 +185,7 @@ class WalletRepository {
     final payments = await ldkNode.listPayments();
     logger.i("======Payments========");
     for (var e in payments) {
-      if (e.status == ldk.PaymentStatus.succeeded) {
+      if (e.status == ldk.PaymentStatus.Succeeded) {
         logger.i("[+] Amount: ${e.amountMsat}");
         logger.i("[+] Direction: ${e.direction}");
         logger.i("[+] Status: ${e.status}");
