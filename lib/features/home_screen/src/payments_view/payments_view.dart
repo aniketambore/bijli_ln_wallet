@@ -46,7 +46,7 @@ class _PaymentsState extends State<Payments> {
   }
 
   Widget _buildTileLeading(PaymentDetails paymentDetails) {
-    bool paymentReceived = paymentDetails.direction == PaymentDirection.inbound;
+    bool paymentReceived = paymentDetails.direction == PaymentDirection.Inbound;
     return Container(
       width: 48,
       height: 48,
@@ -69,7 +69,7 @@ class _PaymentsState extends State<Payments> {
 
   Widget _buildTileTitle(PaymentDetails paymentDetails) {
     final cubit = context.read<HomeScreenCubit>();
-    String type = paymentDetails.direction == PaymentDirection.inbound
+    String type = paymentDetails.direction == PaymentDirection.Inbound
         ? 'Received'
         : 'Sent';
     int amountSat = paymentDetails.amountMsat == null

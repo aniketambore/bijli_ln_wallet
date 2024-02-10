@@ -14,10 +14,7 @@ dependencies:
       url: https://github.com/aniketambore/bitcoinuikit-flutter.git
       ref: alternative-implementation
   bitcoin_icons: ^0.0.4
-  ldk_node:
-    git:
-      url: https://github.com/LtbLightning/ldk-node-flutter/
-      ref: main
+  ldk_node: ^0.1.2
   bolt11_decoder: ^1.0.2
   bip39: ^1.0.6
   flutter_secure_storage: ^9.0.0
@@ -36,7 +33,7 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  flutter_lints: ^2.0.0
+  flutter_lints: ^3.0.1
 
 flutter:
   uses-material-design: true
