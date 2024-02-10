@@ -116,10 +116,7 @@ dependencies:
       url: https://github.com/aniketambore/bitcoinuikit-flutter.git
       ref: alternative-implementation
   bitcoin_icons: ^0.0.4
-  ldk_node:
-    git:
-      url: https://github.com/LtbLightning/ldk-node-flutter/
-      ref: main
+  ldk_node: ^0.1.2
   bolt11_decoder: ^1.0.2
   bip39: ^1.0.6
   flutter_secure_storage: ^9.0.0
@@ -238,7 +235,7 @@ Now, locate `// TODO: Implement method to create or recover a wallet` and replac
     final storagePath = "${directory.path}/$LDK_NODE_DIR";
     // 4
     final builder = ldk.Builder()
-        .setEntropyBip39Mnemonic(mnemonic: ldk.Mnemonic(internal: mnemonic))
+        .setEntropyBip39Mnemonic(mnemonic: ldk.Mnemonic(mnemonic))
         .setNetwork(network)
         .setStorageDirPath(storagePath)
         .setEsploraServer(esploraServerUrl: WalletRepository.esploraURL);
@@ -439,7 +436,7 @@ Let's get our hands dirty by implementing the method to open a Lightning payment
     int? pushToCounterpartySat,
   }) async {
     await ldkNode.connectOpenChannel(
-      address: ldk.NetAddress.iPv4(
+      netaddress: ldk.NetAddress.iPv4(
         addr: host,
         port: port,
       ),
@@ -603,6 +600,7 @@ LDK also provides an option for creating a zero-sats invoice. This type of invoi
   Future<String> createZeroSatInvoice({String? description}) async {
     // 1
     final invoice = await ldkNode.receiveVariableAmountPayment(
+      nodeId: await ldkNode.nodeId(),
       // 2
       description: (description != null && description.trim().isNotEmpty)
           ? description
@@ -665,7 +663,7 @@ Locate `// TODO: Implement method to send an off-chain Lightning payment` and re
   }) async {
     // 1
     final paymentHash = await ldkNode.sendPayment(
-      invoice: ldk.Invoice(
+      invoice: ldk.Bolt11Invoice(
         internal: bolt11Invoice,
       ),
     );
