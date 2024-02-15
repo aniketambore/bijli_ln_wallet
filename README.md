@@ -1,9 +1,9 @@
 <div align="center">
-    <img src="https://i.ibb.co/QjNd7M1/bijli-white.png" width="80px" alt="Bijli Wallet Logo"/>
-    <h1> Bijli: A Non-Custodial Bitcoin Lightning Wallet</h1>
+    <img src="https://i.ibb.co/dWGyF4m/flutter-ldk-cover.png" alt="Tutorial Logo"/>
+    <h1> How to develop a Non-Custodial Bitcoin Lightning Wallet using Flutter and LDK?</h1>
 </div>
 
-Hey there! In this tutorial, I'm going to show you how to create your very own Non-Custodial Bitcoin Lightning wallet using Flutter and the Lightning Development Kit (LDK). It all began for me when I finished reading "Mastering the Lightning Network" last month. As a little side project, I decided to dive into the world of non-custodial Bitcoin Lightning wallets, and here's what I've learned and developed along the way.
+Hello everyone! My name is Aniket (aka Anipy) and in this tutorial, I'm going to show you how to create your very own Non-Custodial Bitcoin Lightning wallet using Flutter and the Lightning Development Kit (LDK). It all began for me when I finished reading "Mastering the Lightning Network" book. As a little side project, I decided to develop a non-custodial Bitcoin Lightning wallet, and here's what I've learned and developed along the way.
 
 In this tutorial, I'll share my experiences and provide answers to some of the questions and challenges I encountered while developing the wallet. I received plenty of help from the friendly LDK team developers on their Discord channel, and I'll do my best to explain everything in a straightforward manner. Just a heads up, we won't be diving too deep into UI development or Flutter here; our main focus will be on implementing a Lightning wallet in Flutter with LDK.
 
@@ -25,17 +25,19 @@ The Lightning Network has some cool features:
 - Nodes involved in routing payments are aware only of their predecessor and successor in the payment route.
 - The Lightning Network utilizes real bitcoin, maintaining user custody and full control over funds.
 
-So, remember that the Lightning Network is not a separate token or coin; it's built on top of Bitcoin.
+So, remember that the Lightning Network is not a separate token or coin; it's built on top of Bitcoin. In the next section we'll talk about Lightning node.
 
 ## What is Lightning Node?
-The Lightning Network operates through software apps that implement the Lightning Network protocol and most of these apps follow common standards outlined in the BOLTs.
+The Lightning Network operates through software apps that implement the Lightning Network protocol and most of these apps follow common standards outlined in the [BOLTs](https://github.com/lightning/bolts/tree/master) specification.
 
 A Lightning Network node (LN node) is a piece of software with these key characteristics:
-- It serves as a wallet for payments on both the Lightning and Bitcoin networks.
+- It serves as a wallet for payments on both the Lightning and Bitcoin network.
 - It communicates directly with other nodes, forming the network through peer-to-peer connections.
 - It needs access to the Bitcoin blockchain for payment security.
 
 Users have the highest level of control when they run their own Bitcoin node and Lightning node. However, Lightning nodes can also use a lightweight Bitcoin client to interact with the Bitcoin blockchain.
+
+Now in the next section let's talk about Lightning wallet.
 
 ## What is Lightning Wallet?
 The term "Lightning wallet" can be a bit unclear because it can refer to a combination of various components with some user interface. The most common components found in Lightning wallet software include:
@@ -49,7 +51,7 @@ The term "Lightning wallet" can be a bit unclear because it can refer to a combi
 
 A Lightning wallet may contain all of these functions, acting as a "full" wallet, with no reliance on any third-party services. Or one or more of these components may rely (partially or entirely) on third-party services that mediate those functions.
 
-A key distinction (pun intended) is whether the keystore function is internal or outsourced. In blockchains, control of keys determines custody of funds, as memorialized by the phrase "your keys, your coins; not your keys, not your coins."
+A key distinction (pun intended) is whether the keystore function is internal or outsourced. In blockchains, control of keys determines custody of funds, as memorialized by the phrase "*your keys, your coins; not your keys, not your coins*".
 
 Custodial wallets outsource key management, while noncustodial wallets put you in control of your own keys.
 
@@ -57,35 +59,35 @@ The wallet you'll learn to create in this tutorial is a noncustodial wallet. Thi
 
 The term "noncustodial wallet" implies that the keystore is local and under the user's control. However, some of the other wallet components may or may not rely on trusted third parties.
 
-Control over keys is a critical consideration when choosing a Lightning wallet.
+Remember that, control over keys is a critical consideration when choosing a Lightning wallet.
 
 Now that you understand the Lightning Network and its key parts, let's jump in and start making your very own Lightning wallet. Get ready for an exciting journey!
 
 ## Getting started
-Before we get our hands dirty with code, let's kick things off by grabbing the "starter" project for this tutorial. Just copy and paste the following command into your terminal:
+Before we get our hands dirty with code, let's kick things off by grabbing the "**starter**" project for this tutorial. Just copy and paste the following command into your terminal:
 
 ```bash
 git clone -b starter --single-branch https://github.com/aniketambore/bijli_ln_wallet
 ```
 
-This command will get you the "starter" project in no time and will save your time.
+This command will get you the "**starter**" project in no time and will save your time.
 
 Feeling the excitement? Great! Now, fire up your favorite code editor, whether it's VS Code or Android Studio. After that, run `flutter pub get` to set things up, and then launch the app. Right now, it's a straightforward UI project, but we'll soon weave in some Lightning Network magic.
 
-![](App Screenshot here)
+![Wallet Creation Screen](https://i.ibb.co/5LZd7RH/wallet-creation-ss-1.png)
 
 ## Project files
-There are some files in the `starter` project to help you out. Before you learn how to develop a non-custodial bitcoin lightning wallet, take a look at them.
+There are some files in the **starter** project to help you out. Before you learn how to develop a non-custodial bitcoin lightning wallet, take a look at them.
 
 ### Assets folder
 Inside the **assets** directory, you'll find images that will be used to build your app.
 
-![](Assets directory image here)
+![Assets Folder](https://i.ibb.co/jwY0v67/assets-folder.png)
 
 ## Folder Structure
 In the **lib** directory, you'll notice various folders, each serving a specific purpose:
 
-![](lib directory image here)
+![lib Folder](https://i.ibb.co/SBKfxXY/lib-folder.png)
 
 ### Component Library Folder
 **lib/component_library** contains all the UI components that either are, or have the potential to be, reused across different screens.
@@ -98,10 +100,10 @@ In the **lib** directory, you'll notice various folders, each serving a specific
 
 I consider a feature to be either:
 1. A screen
-2. A dialog that excutes I/O calls, like networking or databases. The **lib/features/send_offchain_dialog** falls into this category.
+2. A dialog that excutes I/O calls. The **lib/features/send_offchain_dialog** falls into this category.
 
 ### Wallet Repository Folder
-**lib/wallet_repository** is where the communication with the LDK (Lightning Development Kit) Node Flutter package happens. This repository coordinates data from different sources and keeps things running smoothly.
+**lib/wallet_repository** is where the communication with the LDK (Lightning Development Kit) Node Flutter plugin happens. This repository coordinates data from different sources and keeps things running smoothly.
 
 ## App libraries
 The **starter** project comes with a set of useful libraries listed in `pubspec.yaml`:
@@ -114,10 +116,7 @@ dependencies:
       url: https://github.com/aniketambore/bitcoinuikit-flutter.git
       ref: alternative-implementation
   bitcoin_icons: ^0.0.4
-  ldk_node:
-    git:
-      url: https://github.com/LtbLightning/ldk-node-flutter/
-      ref: main
+  ldk_node: ^0.1.2
   bolt11_decoder: ^1.0.2
   bip39: ^1.0.6
   flutter_secure_storage: ^9.0.0
@@ -136,11 +135,11 @@ dependencies:
 
 Here's what they help you to do:
 
-- `bitcoin_ui_kit`: This package offers helpful widgets and themes following the Bitcoin design guide. It's like a design toolbox.
+- `bitcoin_ui_kit`: This package offers helpful widgets and themes following the [Bitcoin design guide](https://bitcoin.design/guide/). It's like a design toolbox,
 
-- `bitcoin_icons`: Use this package to easily access the collections of Bitcoin icons for your app.
+- `bitcoin_icons`: Use this package to easily access the collections of [Bitcoin icons](https://bitcoinicons.com/) for your app.
 
-- `ldk_node`: This package provides a simple interface for setting up and running a Lightning node with an integrated on-chain wallet. It's like having a friendly helper.
+- `ldk_node`: This package provides a simple interface for setting up and running a Lightning node with an integrated on-chain wallet.
 
 - `bolt11_decoder`: Use this package to decode BOLT11 invoices.
 
@@ -148,7 +147,7 @@ Here's what they help you to do:
 
 - `flutter_secure_storage`: This package ensures secure storage capabilities for your app. It's your secret vault for mnemonic.
 
-- `path_provider`: This package helps you access the file system path on the device. It's like your map to the app's storage.
+- `path_provider`: This package helps you access the file system path on the device.
 
 - `qr_flutter`: This package enables you to generate QR codes within your app.
 
@@ -164,7 +163,7 @@ Here's what they help you to do:
 
 - `routemaster`: This package offers a flexible routing system.
 
-- `flutter_bloc`: This package is used to implement the BLoC (Business Logic Component) pattern in our app.
+- `flutter_bloc`: This package is used to implement the BLoC (Business Logic Component) design pattern in our app.
 
 - `confetti`: This package adds confetti animations to our app.
 
@@ -181,7 +180,7 @@ import 'package:ldk_node/ldk_node.dart' as ldk;
 import 'package:bip39/bip39.dart' as bip39;
 import 'package:path_provider/path_provider.dart';
 ```
-Here we're importing the `ldk_node` plugin and `bip39` and `path_provider` package, giving alias "ldk" and "bip39" is for easier reference in your code.
+Here we're importing the `ldk_node` plugin and `bip39` and `path_provider` package, giving alias "**ldk**" and "**bip39**" is for easier reference in your code.
 
 ### Initialize Wallet Configuration
 Move on to `// TODO: Initialize variables here` and replace it with the following code:
@@ -224,7 +223,7 @@ In the above code, we're:
 2. Returning the generated mnemonic for wallet setup.
 
 ### Create or Recover a Wallet
-Now, replace `// TODO: Implement method to create or recover a wallet` with the following code:
+Now, locate `// TODO: Implement method to create or recover a wallet` and replace it with the following code:
 
 ```dart
   Future<String> createOrRecoverWallet({String? recoveryMnemonic}) async {
@@ -236,7 +235,7 @@ Now, replace `// TODO: Implement method to create or recover a wallet` with the 
     final storagePath = "${directory.path}/$LDK_NODE_DIR";
     // 4
     final builder = ldk.Builder()
-        .setEntropyBip39Mnemonic(mnemonic: ldk.Mnemonic(internal: mnemonic))
+        .setEntropyBip39Mnemonic(mnemonic: ldk.Mnemonic(mnemonic))
         .setNetwork(network)
         .setStorageDirPath(storagePath)
         .setEsploraServer(esploraServerUrl: WalletRepository.esploraURL);
@@ -294,17 +293,13 @@ In the `Wallet` object, replace `nodeId: 'dummy_node_id'` with `nodeId: nodeId`,
 
 Let's test the app! If it's already running, perform a hot reload and click the "*Create Wallet*" button.
 
-![](Create wallet screen.gif)
+![Wallet Creation To Home Screen](https://i.ibb.co/YXWffmr/wallet-creation-to-home-ss-2.png)
 
 Now, you'll be on the home screen. To view your mnemonic and node ID, click the popup menu button in the app's toolbar and select "*Wallet Info*."
 
-The Wallet Information screen will appear, displaying your wallet information as:
+The Wallet Information screen will appear, displaying your wallet information. Click on "*Display Mnemonic*" and a dialog will pop up, revealing your wallet mnemonic as:
 
-![](wallet information screen here)
-
-Click on "*Display Mnemonic*" and a dialog will pop up, revealing your wallet mnemonic as:
-
-![](Wallet mnemonic dialog)
+![Wallet Information and Mnemonic Dialog](https://i.ibb.co/rkhSdL6/wallet-info-mnemonic-display-ss-3.png)
 
 In the next section, we'll focus on implementing Bitcoin on-chain functionality in our app.
 
@@ -354,6 +349,8 @@ Once you've made these updates, perform a hot reload of your app. Afterward, cli
 
 After the refresh is complete, you'll see your Bitcoin on-chain address displayed, replacing '*dummy_address*'. The QR code will also be encoded with this Bitcoin on-chain address.
 
+![Bitcoin On-Chain Address Display](https://i.ibb.co/J7VKH4c/bitcoin-onchain-address-ss-4.png)
+
 Now, let's proceed to send some testnet Bitcoin (tBTC) to that address. 
 
 You can get some tBTC to play with from a testnet bitcoin faucet, which gives out free tBTC on demand. Here are a few testnet faucets to get you started:
@@ -361,6 +358,8 @@ You can get some tBTC to play with from a testnet bitcoin faucet, which gives ou
 - https://bitcoinfaucet.uo1.net/
 - https://testnet-faucet.com/btc-testnet/
 - https://kuttler.eu/en/bitcoin/btc/faucet/
+
+![Bitcoin On-Chain Balance Received](https://i.ibb.co/4KRrytS/bitcoin-onchain-balance-received-ss-5.png)
 
 So here with testnet bitcoin, we're not risking real funds. So it's good!
 
@@ -381,6 +380,7 @@ Locate `// TODO: Implement method to send funds to an on-chain address` and repl
       address: addr,
       amountSats: amountSats,
     );
+    print('[WalletRepository] Send On-Chain Txid: ${txid.internal}');
     // 3
     return txid.internal;
   }
@@ -391,13 +391,11 @@ In the code above, you're doing the following:
 2. Initiating an on-chain transaction to send the specified amount of sats to the address.
 3. Returning the transaction ID (txid) for reference.
 
-Now, perform a hot reload of your app, navigate to the **Payments** tab on the home screen, click the floating action button, and choose '**SEND TO BTC ADDRESS**' Enter the recipient's on-chain Bitcoin address and the amount in sats as:
-
-![](Send ONCHAIN Field)
+Now, perform a hot reload of your app, navigate to the **Payments** tab on the home screen, click the floating action button, and choose '**SEND TO BTC ADDRESS**' Enter the recipient's on-chain Bitcoin address and the amount in sats.
 
 Add testnet bitcoin on-chain address in their, if you don't have any bitcoin testnet address just do one thing, send me some tBTC here `tb1qyvp29ysl00rqrayyh633fgmdqsqsucwtnaw9n5` 🙃. Also specify the amount that you want to send in sats. Click on submit.
 
-![](payment successful success screen)
+![Send On-Chain](https://i.ibb.co/fdYr9Nw/bitcoin-send-onchain-ss6.png)
 
 After the payment is successful, you'll see a success indicator screen, and the transaction ID (txid) will be displayed on the console. You can copy this txid and paste it into a block explorer like https://mempool.space/testnet to view your transaction details.
 
@@ -410,7 +408,7 @@ I'll update this section once these issues are resolved. In the next section, we
 ## Opening Payment Channel
 Let's kick things off by understanding what a payment channel is, but don't worry; we'll keep it simple. In simple terms, a payment channel is like a financial relationship between two Lightning nodes. It's established by funding a 2-of-2 multisignature address from the two channel partners.
 
-Payment channels are built on top of 2-of-2 multisignature addresses.
+So, payment channels are built on top of 2-of-2 multisignature addresses.
 
 In summary, a multisignature address is where bitcoin is locked so that it requires multiple signatures to unlock and spend. In a 2-of-2 multisignature address, as used in the Lightning Network, there are two participating signers and both need to sign to spend the funds.
 
@@ -419,11 +417,11 @@ To open a payment channel, we first need to establish a connection with another 
 - The **NODEID** is a unique identifier for a specific node, often presented in hexadecimal encoding.
 - The **Address:Port** is a network address identifier where the node can be reached. This can be in various formats, like TCP/IP (IPv4 or IPv6 address with a TCP port number) or TCP/Tor (a Tor "onion" address with a TCP port number).
 
-For example, the **Node Identifier** for the PLEBNET.DEV testnet lightning node looks like this: `03ba00a57cec1cef4873065ad54d0912696274cc53155b29a3b1256720e33a0943@24.199.122.244:19735`. You can often find the identifier encoded in a QR code for easy scanning and connecting.
+For example, the **Node Identifier** for the [PLEBNET.DEV testnet lightning node](https://mempool.space/testnet/lightning/node/03ba00a57cec1cef4873065ad54d0912696274cc53155b29a3b1256720e33a0943) looks like this: `03ba00a57cec1cef4873065ad54d0912696274cc53155b29a3b1256720e33a0943@24.199.122.244:19735`. You can often find the identifier encoded in a QR code for easy scanning and connecting.
 
 Keep in mind that to open a payment channel, you need the Node Identifier, which includes nodeId, address/host, and port. Also, you need to specify the channel amount, which is the total channel capacity.
 
-Here's a pro tip: You can choose to push/send an amount to your channel partner during channel funding. This helps balance the channel right from the start and allows you to receive payments right away. But be careful when setting this value because it essentially sends money to your channel partner.
+**Here's a pro tip**: You can choose to push/send an amount to your channel partner during channel funding. This helps balance the channel right from the start and allows you to receive payments right away. **But be careful when setting this value because it essentially sends money to your channel partner**.
 
 So before constructing the payment channel we must first be connected with our channel peer to which we want to open a payment channel with. The good news is, LDK offers a convenient method called `connectOpenChannel` to connect to a node and open a new channel. It also handles disconnects and reconnections automatically.
 
@@ -438,7 +436,7 @@ Let's get our hands dirty by implementing the method to open a Lightning payment
     int? pushToCounterpartySat,
   }) async {
     await ldkNode.connectOpenChannel(
-      address: ldk.NetAddress.iPv4(
+      netaddress: ldk.NetAddress.iPv4(
         addr: host,
         port: port,
       ),
@@ -531,39 +529,37 @@ Next, locate `// TODO: Calculate inbound and outbound channel capacities` and re
 In the `Wallet` object, replace `inboundCapacitySats: 0` with `inboundCapacitySats: inboundCapacitySats`, `outboundCapacitySats: 0` with `outboundCapacitySats: outboundCapacitySats`, `paymentChannelsList: const []` with `paymentChannelsList: paymentChannelsList`, `peersList: const []` with `peersList: peersList` and `paymentsList: const []` with `paymentsList: paymentList`.
 
 Now, perform a hot reload of your app and run it. Refresh the app by clicking the refresh icon on home screen. To open a payment channel, follow these steps:
-1. Go to the "Channels" tab.
-2. Click on the floating action button and select "ENTER A NODE URI" to open the OpenChannelScreen.
+1. Go to the "**Channels**" tab.
+2. Click on the floating action button and select "**ENTER A NODE URI**" to open the `OpenChannelScreen`.
 3. Enter the node ID, address, port, amount, and counterparty amount.
-4. Click "submit."
+4. Click "**submit**."
 
-So, we'll be opening a payment channel with the PLEBNET.DEV testnet Lightning node using its node identifier: "03ba00a57cec1cef4873065ad54d0912696274cc53155b29a3b1256720e33a0943@24.199.122.244:19735."
-
-![](open channel screen)
+So, we'll be opening a payment channel with the [PLEBNET.DEV testnet Lightning node](https://mempool.space/testnet/lightning/node/03ba00a57cec1cef4873065ad54d0912696274cc53155b29a3b1256720e33a0943) using its node identifier: "`03ba00a57cec1cef4873065ad54d0912696274cc53155b29a3b1256720e33a0943@24.199.122.244:19735`".
 
 If everything goes as planned, you'll see a success screen.
 
-![](success screen)
+![Opening Payment Channel](https://i.ibb.co/DbYBFzQ/opening-payment-channel-ss7.png)
 
-Clicking "okay" will take you back to the home screen, where you can see that you now have an open channel with 100,000 sats of capacity, 49,000 sats outbound capacity, and 49,000 sats inbound capacity. The rest is the Bitcoin on-chain fees for opening a payment channel by funding a 2-of-2 multisignature address, which is recorded on the Bitcoin blockchain.
+Clicking "**okay**" will take you back to the home screen, where you can see that you now have an open channel with 100,000 sats of capacity, 49,000 sats outbound capacity, and 49,000 sats inbound capacity. The rest is the Bitcoin on-chain fees for opening a payment channel by funding a 2-of-2 multisignature address, which is recorded on the Bitcoin blockchain.
+
+![Channels Tab](https://i.ibb.co/Fgj6SL3/channels-tab-ss-8.png)
 
 Now, let's refresh the wallet, and you'll see the status of your channel. You may need to wait a bit for the funding transaction to be recorded on the Bitcoin blockchain, similar to waiting for confirmations when acquiring Bitcoin from a faucet.
 
-![](Channel Tab not ready channel)
-
 To check if our channel is ready for action, look at the icon next to the list tile, showing the number of confirmations needed for the channel to be usable.
 
-![](Channel Tab ready for use)
+![Channel Ready](https://i.ibb.co/5vJSMTw/channel-ready-ss9.png)
 
-If you see a circle checkmark icon, that means your channel with the PLEBNET.DEV testnet lightning node is open, funded, and ready for action!
+If you see a circle checkmark icon, that means your channel with the [PLEBNET.DEV testnet Lightning node](https://mempool.space/testnet/lightning/node/03ba00a57cec1cef4873065ad54d0912696274cc53155b29a3b1256720e33a0943) is open, funded, and ready for action!
 
-Also, to take a look at our connected node peers. To do that, click on the pop-up menu button in the app bar, then click "Wallet Info" and select "List Channel Peers." This will display a dialog with all the connected peers to our node.
+Also, to take a look at your connected node peers. To do that, click on the pop-up menu button in the app bar, then click "Wallet Info" and select "List Channel Peers." This will display a dialog with all the connected peers to our node.
 
-![](node peers dialog)
+![Wallet Info and Node Peers](https://i.ibb.co/PzJLWTn/wallet-info-node-peer-dialog-ss-10.png)
 
 ## Creating BOLT11 Invoice
 Most payments on the Lightning Network start with an invoice, generated by the recipient of the payment.
 
-An invoice is a simple payment instruction containing information such as a unique payment identifier (payment hash), recipient, amount, and optional text description.
+An invoice is a simple payment instruction containing information such as a unique payment identifier (payment hash), amount, and optional text description.
 
 The payment hash is the most important part of the invoice, allowing the payment to travel across multiple channels atomically.
 
@@ -604,6 +600,7 @@ LDK also provides an option for creating a zero-sats invoice. This type of invoi
   Future<String> createZeroSatInvoice({String? description}) async {
     // 1
     final invoice = await ldkNode.receiveVariableAmountPayment(
+      nodeId: await ldkNode.nodeId(),
       // 2
       description: (description != null && description.trim().isNotEmpty)
           ? description
@@ -631,27 +628,27 @@ Moving on to the `_getWalletInformation()` method, locate `// TODO: If there are
     }
 ```
 
-Just a quick note: `inboundCapacitySats` is the amount that you're allowed to receive on the Lightning Network. If you don't have any inbound capacity, you can't receive on Lightning. To balance inbound and outbound capacity, nodes should open channels to others and encourage others to open channels to their node.
+**Just a quick note**: `inboundCapacitySats` is the amount that you're allowed to receive on the Lightning Network. If you don't have any inbound capacity, you can't receive on Lightning. To balance inbound and outbound capacity, nodes should open channels to others and encourage others to open channels to their node.
 
-When we opened a payment channel in the Opening a payment channel section we opened the payment channel with capacity of 100,000 sats and we had also pushed 50,000 sats to our channel partner, which means we've inbound capacity of 50,000 sats and outbound capacity of 50,000 sats. Therefore we can receive upto 50,000 sats and can send upto 50,000 sats on lightning.
+When we opened a payment channel in the ![Opening Payment Channel](#opening-payment-channel) section we opened the payment channel with capacity of 100,000 sats and we had also pushed 50,000 sats to our channel partner, which means we've inbound capacity of 50,000 sats and outbound capacity of 50,000 sats. Therefore we can receive upto 50,000 sats and can send upto 50,000 sats on lightning.
 
 Now, in the `Wallet` object, replace `bolt11Invoice: 'dummy_invoice'` with `bolt11Invoice: bolt11Invoice`.
 
-Give your app a hot reload and click on the refresh icon on the home screen. Then head to the "Receive" tab and click on child the "LIGHTNING" tab.
+Give your app a hot reload and click on the refresh icon on the home screen. Then head to the "**Receive**" tab and click on child the "**LIGHTNING**" tab.
 
-![](Lightning tab)
+![Zero-sat Invoice](https://i.ibb.co/0f9SGLs/creating-invoice-ss-11.png)
 
-The invoice displayed there is a zero-sats invoice with a default description. If you want to customize this invoice, click on the "EDIT REQUEST" button, and a dialog will pop up. Enter the description and the amount in sats.
+The invoice displayed there is a zero-sats invoice with a default description. If you want to customize this invoice, click on the "**EDIT REQUEST**" button, and a dialog will pop up. Enter the description and the amount in sats.
 
-![](edit request dialog)
+![Creating Invoice](https://i.ibb.co/P48kYhZ/creating-invoice-ss-12.png)
 
-Now, give it a go by paying this invoice with a different Lightning testnet wallet. You can download the Eclair Mobile Testnet wallet from the Play Store, for example. In Eclair, grab some tBTC from a faucet, open a payment channel with the same PELBNET.DEV testnet Lightning node, and then try to pay this invoice from the Eclair wallet.
+Now, give it a go by paying this invoice with a different Lightning testnet wallet. You can download the [Eclair Mobile Testnet wallet](https://play.google.com/store/apps/details?id=fr.acinq.eclair.wallet) from the Play Store, for example. In Eclair, grab some tBTC from a faucet, open a payment channel with the same [PLEBNET.DEV testnet Lightning node](https://mempool.space/testnet/lightning/node/03ba00a57cec1cef4873065ad54d0912696274cc53155b29a3b1256720e33a0943), and then try to pay this invoice from the Eclair wallet.
 
-![](Sending from eclair wallet)
+![Paying from Eclair](https://i.ibb.co/D1YRs57/eclair-paying-ss-13.png)
 
-Once the payment goes through in Eclair, click on the refresh icon in "Bijli," and when the refreshing is complete, switch to the "Payments" tab. You'll see a ListTile with payment information, which means you successfully received sats on Lightning! ⚡
+Once the payment goes through in Eclair, click on the refresh icon in "Bijli," and when the refreshing is complete, switch to the "**Payments**" tab. You'll see a ListTile with payment information, which means you successfully received sats on Lightning! ⚡
 
-![](Payment tab)
+![Payments Tab](https://i.ibb.co/8Mcvndd/payments-tab-ss-14.png)
 
 This is where the Lightning Network shines, enabling quick and hassle-free payments without the need to wait for confirmations. Now, let's move on to learning how to pay a BOLT11 invoice.
 
@@ -666,7 +663,7 @@ Locate `// TODO: Implement method to send an off-chain Lightning payment` and re
   }) async {
     // 1
     final paymentHash = await ldkNode.sendPayment(
-      invoice: ldk.Invoice(
+      invoice: ldk.Bolt11Invoice(
         internal: bolt11Invoice,
       ),
     );
@@ -682,21 +679,19 @@ Here's what this code does:
 2. It retrieves the payment details using the payment hash.
 3. It returns the status of the payment, indicating whether it was successful, pending, or failed.
 
-Now, perform a hot reload of your app. In the "Payments" tab, click on the floating action button, then select "PASTE AN INVOICE." This will open the `SendOffChainScreen`. Paste the invoice generated by the Eclair wallet.
+Now, perform a hot reload of your app. In the "**Payments**" tab, click on the floating action button, then select "**PASTE AN INVOICE**". This will open the `SendOffChainScreen`. Paste the invoice generated by the Eclair wallet.
 
-![](Send off chain screen)
+![Paste Invoice Screen](https://i.ibb.co/PDcvmCy/paste-invoice-screen-ss-14.png)
 
 Click "continue," and you'll see a dialog displaying the invoice details, including the requested amount and description.
 
-![](send off chain dialog)
+![SendOffChain Dialog](https://i.ibb.co/DkQ6P0x/invoice-decode-dialog-ss-15.png)
 
-Click "Approve" in the dialog, and when the payment is successful, you'll see the "Success Indicator" screen.
+Click "**Approve**" in the dialog, and when the payment is successful, you'll see the "Success Indicator" screen.
 
-![](success screen)
+Click "**okay**" on the success screen, and you'll return to the home screen. Check the transaction information in the "**Payments**" tab.
 
-Click "okay" on the success screen, and you'll return to the home screen. Check the transaction information in the "Payments" tab.
-
-![](payments tab send)
+![Payments Tab](https://i.ibb.co/Qm5RKzV/payments-tab-16.png)
 
 That's how you pay an invoice and manage your Lightning wallet with ease. Enjoy the power of Lightning Network! ⚡
 
@@ -730,9 +725,9 @@ To implement channel closing in our wallet, locate `// TODO: Implement method to
 
 The `closePaymentChannel` method is used to close a payment channel with the specified channel ID and counterparty node ID.
 
-Now, just perform a hot reload of the app. Go to the "Channels" tab, and click on "CLOSE" on the channel's ListTile. A dialog will pop up for confirmation. Click "YES" there, and when the channel is closed, you'll see the success screen displaying the channel ID that was closed.
+Now, just perform a hot reload of the app. Go to the "**Channels**" tab, and click on "**CLOSE**" on the channel's ListTile. A dialog will pop up for confirmation. Click "**YES**" there, and when the channel is closed, you'll see the success screen displaying the channel ID that was closed.
 
-![](success screen)
+![Closing Channel](https://i.ibb.co/FbLFScR/closing-channel-ss-17.png)
 
 Closing a payment channel can be a necessary step in managing your Lightning Network wallet and ensuring the security and flexibility of your funds.
 
@@ -771,6 +766,6 @@ The Lightning Network isn't just a technological advance; it's a game-changer th
 
 But remember, this is just the start. The Lightning Network is a vast and exciting world with endless opportunities. I encourage all readers to keep learning and explore further. Embrace this technology, experiment with it, and let your imagination run wild. The Lightning Network is a wave of innovation, and you have the chance to ride it.
 
-If you have questions or want to connect and share your experiences, feel free to reach out to me on Twitter, Nostr, or LinkedIn.
+If you have questions or want to connect and share your experiences, feel free to reach out to me on [Twitter](https://twitter.com/Anipy1), [Nostr](https://snort.social/p/npub1clqc0wnk2vk42u35jzhc3emd64c0u4g6y3su4x44g26s8waj2pzskyrp9x), or [LinkedIn](https://www.linkedin.com/in/aniketambore/).
 
 Thank you for joining me on this journey. ⚡🌊
